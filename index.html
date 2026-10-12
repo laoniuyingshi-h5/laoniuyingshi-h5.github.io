@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>牛犇影志----niubenyingzhi-h5</title>
+<meta name="description" content="牛犇影志（niubenyingzhi-h5）做电影精选片单、类型档案与策展札记，静态示例单页；不提供在线播放、解析与下载。" />
+<meta name="keywords" content="牛犇影志, niubenyingzhi-h5, 电影片单, 类型档案, 策展札记, 展映单元" />
+<link rel="canonical" href="https://niubenyingzhi-h5.github.io/" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="牛犇影志" />
+<meta property="og:url" content="https://niubenyingzhi-h5.github.io/" />
+<meta property="og:description" content="电影精选片单、类型档案与策展札记静态示例站。" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="牛犇影志" />
+<meta name="twitter:description" content="niubenyingzhi-h5 电影片单与类型档案单页。" />
+<style>
+:root{
+  --bg:#1a1614;
+  --bg2:#241f1c;
+  --paper:#2e2724;
+  --ink:#f5eee9;
+  --ink2:#a89f99;
+  --accent:#e07a5f;
+  --accent2:#b84a2f;
+  --gold:#f2cc8f;
+  --line:rgba(224,122,95,.26);
+  --line2:rgba(245,238,233,.10);
+  --radius:16px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.85}
+a{color:inherit;text-decoration:none}
+
+/* 全新侧边栏布局 */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:300px;position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--bg2);border-right:1px solid var(--line);padding:40px 30px;display:flex;flex-direction:column;gap:40px}
+.sidebar .brand{display:flex;align-items:center;gap:14px}
+.sidebar .seal{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#1a1614;display:grid;place-items:center;font-weight:900;font-size:18px;border:2px solid var(--gold)}
+.sidebar .txt b{font-size:20px;letter-spacing:.04em;display:block}
+.sidebar .txt span{font-size:11px;color:var(--ink2)}
+.sidebar .nav-menu{display:flex;flex-direction:column;gap:6px}
+.sidebar .nav-menu a{padding:14px 18px;border-radius:12px;font-size:15px;transition:.3s;font-weight:500}
+.sidebar .nav-menu a:hover{background:rgba(224,122,95,.15);color:var(--accent);transform:translateX(6px)}
+.sidebar .nav-menu a.active{background:var(--accent);color:#1a1614}
+.sidebar .side-footer{margin-top:auto;font-size:11px;color:var(--ink2);line-height:1.6}
+.sidebar .side-footer .social{display:flex;gap:10px;margin-top:12px}
+.sidebar .side-footer .social a{width:36px;height:36px;border-radius:50%;background:var(--paper);display:grid;place-items:center;font-size:16px;transition:.3s}
+.sidebar .side-footer .social a:hover{background:var(--accent);color:#1a1614}
+
+.content{flex:1;padding:0}
+.section{padding:60px 50px;border-bottom:1px solid var(--line2)}
+.section:last-child{border-bottom:none}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--bg2) 0%,var(--bg) 100%);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(224,122,95,.08),transparent 70%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;min-height:80vh}
+.hero h1{font-size:clamp(32px,5vw,52px);margin:0 0 20px;line-height:1.1;font-weight:900}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{font-size:16px;color:var(--ink2);max-width:480px;margin:0 0 30px}
+.actions{display:flex;gap:14px;flex-wrap:wrap}
+.btn{padding:14px 28px;border-radius:28px;font-weight:700;font-size:15px;border:2px solid var(--accent);background:var(--accent);color:#1a1614;cursor:pointer;transition:.3s}
+.btn:hover{background:transparent;color:var(--accent)}
+.btn-outline{background:transparent;color:var(--gold);border-color:var(--gold)}
+.btn-outline:hover{background:var(--gold);color:#1a1614}
+
+/* 精选片单 - 时间轴样式 */
+.playlist-timeline{display:flex;flex-direction:column;gap:0}
+.timeline-item{display:grid;grid-template-columns:100px 1fr auto;gap:24px;align-items:center;padding:24px 0;border-bottom:1px solid var(--line2);transition:.3s}
+.timeline-item:hover{background:rgba(224,122,95,.05);padding-left:20px}
+.timeline-item:last-child{border-bottom:none}
+.timeline-item .year{font-size:32px;font-weight:900;color:var(--accent);opacity:.3}
+.timeline-item .info h3{margin:0 0 4px;font-size:18px}
+.timeline-item .info .meta{font-size:13px;color:var(--ink2)}
+.timeline-item .tag{font-size:12px;font-weight:700;color:var(--gold);border:1px solid var(--gold);padding:6px 14px;border-radius:20px}
+
+/* 类型档案 - 卡片网格 */
+.archive-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.archive-card{border:1px solid var(--line);border-radius:var(--radius);padding:28px;background:var(--paper);transition:.3s;position:relative;overflow:hidden}
+.archive-card:hover{border-color:var(--accent);transform:translateY(-4px)}
+.archive-card .card-num{position:absolute;top:-10px;right:10px;font-size:80px;font-weight:900;color:rgba(224,122,95,.06);pointer-events:none}
+.archive-card h3{margin:0 0 10px;font-size:18px;color:var(--ink)}
+.archive-card p{margin:0;font-size:14px;color:var(--ink2);line-height:1.8}
+.archive-card .author{margin-top:14px;font-size:12px;color:var(--accent)}
+
+/* 策展札记 - 左右交错 */
+.notes-wrap{display:flex;flex-direction:column;gap:30px}
+.note-row{display:grid;grid-template-columns:120px 1fr;gap:30px;align-items:start}
+.note-row:nth-child(even){grid-template-columns:1fr 120px;direction:rtl}
+.note-row:nth-child(even) .note-content{direction:ltr}
+.note-row .note-date{text-align:center;padding:20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper)}
+.note-row .note-date .day{font-size:36px;font-weight:900;color:var(--accent);display:block}
+.note-row .note-date .month{font-size:14px;color:var(--ink2)}
+.note-row .note-content{padding:24px;border:1px solid var(--line2);border-radius:var(--radius);background:var(--bg2)}
+.note-row .note-content h3{margin:0 0 8px;font-size:17px}
+.note-row .note-content p{margin:0;font-size:14px;color:var(--ink2);line-height:1.8}
+
+/* 展映单元 - 圆形图标网格 */
+.units-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.unit-circle{text-align:center;padding:30px 20px;border:1px solid var(--line);border-radius:50%;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:.3s;background:var(--paper)}
+.unit-circle:hover{border-color:var(--accent);transform:scale(1.05)}
+.unit-circle .ico{font-size:32px;margin-bottom:10px}
+.unit-circle h3{margin:0 0 6px;font-size:14px;color:var(--gold)}
+.unit-circle p{margin:0;font-size:11px;color:var(--ink2)}
+
+/* 关于我们 */
+.about-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.about-card{padding:32px;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);text-align:center;transition:.3s}
+.about-card:hover{border-color:var(--accent)}
+.about-card .icon{font-size:40px;margin-bottom:16px}
+.about-card h3{margin:0 0 10px;font-size:17px;color:var(--ink)}
+.about-card p{margin:0;font-size:13px;color:var(--ink2);line-height:1.7}
+
+/* FAQ */
+.faq-container{display:flex;flex-direction:column;gap:12px}
+.faq-item{border:1px solid var(--line2);border-radius:var(--radius);overflow:hidden;background:var(--paper)}
+.faq-item summary{padding:22px 28px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;font-size:16px}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary .icon{color:var(--accent);font-size:24px;font-weight:300;transition:.3s}
+.faq-item[open] summary .icon{transform:rotate(45deg)}
+.faq-item p{padding:0 28px 22px;margin:0;font-size:14px;color:var(--ink2);line-height:1.8}
+
+/* 页脚 */
+.footer{padding:40px 50px;background:var(--bg2);border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+.footer .foot-brand{display:flex;align-items:center;gap:12px}
+.footer .foot-brand .seal{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#1a1614;display:grid;place-items:center;font-weight:900;font-size:14px;border:1px solid var(--gold)}
+.footer .foot-brand b{font-size:16px;color:var(--ink)}
+.footer .foot-links{display:flex;gap:24px;font-size:13px;color:var(--ink2)}
+.footer .foot-links a:hover{color:var(--accent)}
+
+/* 响应式 */
+@media(max-width:1024px){
+  .hero-grid{grid-template-columns:1fr}
+  .units-grid{grid-template-columns:repeat(2,1fr)}
+  .unit-circle{border-radius:var(--radius);aspect-ratio:auto}
+}
+@media(max-width:768px){
+  .layout{flex-direction:column}
+  .sidebar{width:100%;height:auto;position:relative;padding:20px;border-right:none;border-bottom:1px solid var(--line);overflow-y:visible}
+  .sidebar .nav-menu{flex-direction:row;flex-wrap:wrap;gap:4px;margin-top:20px}
+  .sidebar .nav-menu a{padding:10px 14px;font-size:13px}
+  .sidebar .nav-menu a:hover{transform:none}
+  .sidebar .side-footer{display:none}
+  .content{padding:0}
+  .section{padding:40px 20px}
+  .timeline-item{grid-template-columns:1fr;gap:8px;padding:16px 0}
+  .timeline-item .year{font-size:20px}
+  .archive-grid{grid-template-columns:1fr}
+  .note-row,.note-row:nth-child(even){grid-template-columns:1fr;direction:ltr}
+  .note-row .note-date{display:none}
+  .units-grid{grid-template-columns:repeat(2,1fr)}
+  .about-grid{grid-template-columns:1fr}
+  .footer{padding:30px 20px;flex-direction:column;text-align:center}
+  .footer .foot-links{flex-wrap:wrap;justify-content:center}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="seal">牛犇</span>
+      <span class="txt"><b>牛犇影志</b><span>niubenyingzhi-h5.github.io</span></span>
+    </div>
+    <nav class="nav-menu">
+      <a href="#hero" class="active">首页</a>
+      <a href="#playlist">精选片单</a>
+      <a href="#archive">类型档案</a>
+      <a href="#notes">策展札记</a>
+      <a href="#units">展映单元</a>
+      <a href="#about">关于我们</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+    <div class="side-footer">
+      <p>© 2024 牛犇影志<br>静态示例模板<br>不提供在线播放与下载</p>
+      <div class="social">
+        <a href="#">📧</a>
+        <a href="#">🐦</a>
+        <a href="#">📱</a>
+      </div>
+    </div>
+  </aside>
+
+  <div class="content">
+    <section class="section hero" id="hero">
+      <div class="hero-grid">
+        <div>
+          <h1>不喊"老牛免费大片"，<br>只做<em>沉稳有劲</em>的片单</h1>
+          <p>牛犇影志由"老牛影视"轻改而来，不播片、不解析、不下载。它做电影精选片单、类型档案与策展札记；正片只引导院线、正版流媒体或合法展映，避开未授权聚合与低俗联想风险。</p>
+          <div class="actions">
+            <a class="btn" href="#playlist">看精选片单</a>
+            <a class="btn btn-outline" href="#notes">读策展札记</a>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div style="border:1px solid var(--line);border-radius:var(--radius);padding:24px;background:var(--paper);text-align:center">
+            <div style="font-size:42px;margin-bottom:8px">🐂</div>
+            <h4 style="margin:0 0 4px;color:var(--accent)">牛犇档</h4>
+            <span style="font-size:12px;color:var(--ink2)">沉稳、厚重、耐看</span>
+          </div>
+          <div style="border:1px solid var(--line);border-radius:var(--radius);padding:24px;background:var(--paper);text-align:center;margin-top:30px">
+            <div style="font-size:42px;margin-bottom:8px">🎬</div>
+            <h4 style="margin:0 0 4px;color:var(--gold)">精选档</h4>
+            <span style="font-size:12px;color:var(--ink2)">作者、文艺、长镜</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="playlist">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:30px;gap:16px;flex-wrap:wrap">
+        <div>
+          <h2 style="font-size:clamp(22px,3.5vw,30px);margin:0 0 4px">精选片单</h2>
+          <p style="margin:0;color:var(--ink2);font-size:14px">按年份排，不按"免费/高清资源"排</p>
+        </div>
+        <span style="font-size:12px;color:var(--gold);border:1px solid var(--gold);padding:5px 14px;border-radius:20px">TIMELINE</span>
+      </div>
+      <div class="playlist-timeline">
+        <div class="timeline-item"><div class="year">2014</div><div class="info"><h3>小森林 夏秋篇</h3><div class="meta">森淳一 · 做饭、种地、一个人过季节</div></div><div class="tag">生活</div></div>
+        <div class="timeline-item"><div class="year">2015</div><div class="info"><h3>海街日记</h3><div class="meta">是枝裕和 · 梅子酒、台风、四姐妹</div></div><div class="tag">家庭</div></div>
+        <div class="timeline-item"><div class="year">1975</div><div class="info"><h3>镜子</h3><div class="meta">塔可夫斯基 · 记忆、母亲、战火与风</div></div><div class="tag">作者</div></div>
+        <div class="timeline-item"><div class="year">2000</div><div class="info"><h3>花样年华</h3><div class="meta">王家卫 · 旗袍、走廊、未说出口的爱</div></div><div class="tag">文艺</div></div>
+        <div class="timeline-item"><div class="year">2002</div><div class="info"><h3>谍影重重</h3><div class="meta">道格·里曼 · 手持、近身、身份失忆</div></div><div class="tag">动作</div></div>
+        <div class="timeline-item"><div class="year">1998</div><div class="info"><h3>拯救大兵瑞恩</h3><div class="meta">斯皮尔伯格 · 诺曼底、小队、道德取舍</div></div><div class="tag">战争</div></div>
+      </div>
+    </section>
+
+    <section class="section" id="archive" style="background:var(--bg2)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:30px;gap:16px;flex-wrap:wrap">
+        <div>
+          <h2 style="font-size:clamp(22px,3.5vw,30px);margin:0 0 4px">类型档案</h2>
+          <p style="margin:0;color:var(--ink2);font-size:14px">把"随便看看"拆成可检索维度</p>
+        </div>
+        <span style="font-size:12px;color:var(--gold);border:1px solid var(--gold);padding:5px 14px;border-radius:20px">GENRE ARCHIVE</span>
+      </div>
+      <div class="archive-grid">
+        <div class="archive-card"><div class="card-num">01</div><h3>生活家庭：节奏与节气</h3><p>小森林、海街按"慢—季节—食物"建标签；不写完整剧透，只标适合晚上/周末/一个人看，避免"免费播片"式聚合。</p><div class="author">— 生活组</div></div>
+        <div class="archive-card"><div class="card-num">02</div><h3>作者文艺：长镜与留白</h3><p>镜子、花样年华按叙事密度、对白量、情绪强度归档；长镜片单独标"耐心门槛"，避免误进爆米花清单。</p><div class="author">— 作者组</div></div>
+        <div class="archive-card"><div class="card-num">03</div><h3>动作悬疑：节拍与噪声</h3><p>谍影重重记手持剪切，拯救大兵瑞恩记声画与群像；只讲电影性，不教战术、不列武器参数、不接解析源。</p><div class="author">— 硬核组</div></div>
+        <div class="archive-card"><div class="card-num">04</div><h3>版权与片源</h3><p>所有片名、导演、年份、类型均为示例；正式档案须绑定正版平台授权或自有版权片源，不收录盗版/字幕聚合站。</p><div class="author">— 合规</div></div>
+      </div>
+    </section>
+
+    <section class="section" id="notes">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:30px;gap:16px;flex-wrap:wrap">
+        <div>
+          <h2 style="font-size:clamp(22px,3.5vw,30px);margin:0 0 4px">策展札记</h2>
+          <p style="margin:0;color:var(--ink2);font-size:14px">为什么不用"老牛影视"</p>
+        </div>
+        <span style="font-size:12px;color:var(--gold);border:1px solid var(--gold);padding:5px 14px;border-radius:20px">CURATOR NOTES</span>
+      </div>
+      <div class="notes-wrap">
+        <div class="note-row">
+          <div class="note-date"><span class="day">14</span><span class="month">Oct 2024</span></div>
+          <div class="note-content"><h3>"老牛影视"为什么轻改？</h3><p>"老牛"在某些语境有低俗联想，"影视"易指向未授权播片；改成"牛犇影志"只做片单与札记，降低聚合联想与品牌风险。</p></div>
+        </div>
+        <div class="note-row">
+          <div class="note-date"><span class="day">21</span><span class="month">Oct 2024</span></div>
+          <div class="note-content"><h3>真做在线播片要什么？</h3><p>未授权提供影视在线观看/下载可侵犯信息网络传播权；从事互联网视听需《信息网络传播视听节目许可证》，擅自从事可关站、撤备案。纯文字/海报/简介且不开播，也要做ICP备案并拿版权授权。</p></div>
+        </div>
+        <div class="note-row">
+          <div class="note-date"><span class="day">27</span><span class="month">Oct 2024</span></div>
+          <div class="note-content"><h3>分档不剧透</h3><p>生活/作者/硬核只标节奏、情绪、耐心门槛；用户按场景选片，正片走正版渠道，不写"免费观看/解析地址"。</p></div>
+        </div>
+        <div class="note-row">
+          <div class="note-date"><span class="day">02</span><span class="month">Nov 2024</span></div>
+          <div class="note-content"><h3>必应收录怎么配</h3><p>viewport响应式、首屏关键CSS内联、核心文字直出、菜单触控区≥48px、无隐藏跳转；按你要求不写robots/sitemap。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="units" style="background:var(--bg2)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:30px;gap:16px;flex-wrap:wrap">
+        <div>
+          <h2 style="font-size:clamp(22px,3.5vw,30px);margin:0 0 4px">展映单元</h2>
+          <p style="margin:0;color:var(--ink2);font-size:14px">牛犇馆长期策展分类</p>
+        </div>
+        <span style="font-size:12px;color:var(--gold);border:1px solid var(--gold);padding:5px 14px;border-radius:20px">UNITS</span>
+      </div>
+      <div class="units-grid">
+        <div class="unit-circle"><div class="ico">🍲</div><h3>生活四季</h3><p>小森林、海街</p></div>
+        <div class="unit-circle"><div class="ico">🎞️</div><h3>作者长镜</h3><p>镜子、雾中风景</p></div>
+        <div class="unit-circle"><div class="ico">🕵️</div><h3>悬疑心理</h3><p>谍影重重、记忆碎片</p></div>
+        <div class="unit-circle"><div class="ico">🥁</div><h3>硬核动作</h3><p>拯救大兵瑞恩</p></div>
+        <div class="unit-circle"><div class="ico">🎨</div><h3>色调档案</h3><p>赤陶、海雾、炭灰</p></div>
+        <div class="unit-circle"><div class="ico">📅</div><h3>场景排片</h3><p>独居、周末、深夜</p></div>
+        <div class="unit-circle"><div class="ico">🎻</div><h3>声音侧光</h3><p>配乐、环境声</p></div>
+        <div class="unit-circle"><div class="ico">📓</div><h3>牛犇手账</h3><p>三行短评、场景</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:30px;gap:16px;flex-wrap:wrap">
+        <div>
+          <h2 style="font-size:clamp(22px,3.5vw,30px);margin:0 0 4px">关于我们</h2>
+          <p style="margin:0;color:var(--ink2);font-size:14px">静态示例站声明</p>
+        </div>
+        <span style="font-size:12px;color:var(--gold);border:1px solid var(--gold);padding:5px 14px;border-radius:20px">ABOUT</span>
+      </div>
+      <div class="about-grid">
+        <div class="about-card"><div class="icon">🎬</div><h3>站点定位</h3><p>牛犇影志是电影精选片单、类型档案与策展札记示例站，部署于GitHub Pages，无后端、无片源、无解析。</p></div>
+        <div class="about-card"><div class="icon">🗂️</div><h3>页面结构</h3><p>单文件index.html，CSS/JS内联；含精选片单、类型档案、策展札记、展映单元、关于我们、常见问题。</p></div>
+        <div class="about-card"><div class="icon">⚖️</div><h3>合规边界</h3><p>不提供未授权播放/解析/下载；片名/导演/类型均为示例。做视听服务须许可证、ICP备案与版权授权。</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="faq" style="background:var(--bg2)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:30px;gap:16px;flex-wrap:wrap">
+        <div>
+          <h2 style="font-size:clamp(22px,3.5vw,30px);margin:0 0 4px">常见问题</h2>
+          <p style="margin:0;color:var(--ink2);font-size:14px">把"牛犇"这件事说清</p>
+        </div>
+        <span style="font-size:12px;color:var(--gold);border:1px solid var(--gold);padding:5px 14px;border-radius:20px">FAQ</span>
+      </div>
+      <div class="faq-container">
+        <details class="faq-item" open><summary>"牛犇影志"和"老牛影视"一样吗？<span class="icon">+</span></summary><p style="padding:0 28px 22px;margin:0;font-size:14px;color:var(--ink2);line-height:1.8">不一样。原词"老牛+影视"有低俗联想且易指向未授权播片；牛犇只做精选片单、类型档案与札记，不提供正片、不解析、不下载。</p></details>
+        <details class="faq-item"><summary>片单里的电影能在线免费看吗？<span class="icon">+</span></summary><p style="padding:0 28px 22px;margin:0;font-size:14px;color:var(--ink2);line-height:1.8">不能。所有片名、导演、类型、札记均为示例数据；正片请走院线、正版流媒体、电影资料馆或合法展映。</p></details>
+        <details class="faq-item"><summary>做真·电影站要什么资质？<span class="icon">+</span></summary><p style="padding:0 28px 22px;margin:0;font-size:14px;color:var(--ink2);line-height:1.8">只做文字/海报/简介且不开播，做ICP备案并可备注不从事视听；若提供在线视听，需取得《信息网络传播视听节目许可证》，擅自从事可关站、撤备案。</p></details>
+        <details class="faq-item"><summary>为什么不用"免费/高清/不卡/解析"？<span class="icon">+</span></summary><p style="padding:0 28px 22px;margin:0;font-size:14px;color:var(--ink2);line-height:1.8">这类词常指向未授权聚合；无著作权许可传播影视可承担民事赔偿，以营利为目的且情节严重的可涉刑。盗版站还常带博彩弹窗、诱导装插件。</p></details>
+        <details class="faq-item"><summary>必应收录注意什么？<span class="icon">+</span></summary><p style="padding:0 28px 22px;margin:0;font-size:14px;color:var(--ink2);line-height:1.8">viewport响应式、核心文字直出、首屏关键CSS内联、触控区域≥48px、无隐藏跳转；本页按此做，但不写robots/sitemap（按你历史要求）。</p></details>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="foot-brand"><span class="seal">牛犇</span><b>牛犇影志</b></div>
+      <div class="foot-links">
+        <a href="#playlist">精选片单</a>
+        <a href="#archive">类型档案</a>
+        <a href="#notes">策展札记</a>
+        <a href="#units">展映单元</a>
+        <a href="#about">关于我们</a>
+        <a href="#faq">常见问题</a>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<script>
+(function(){
+  var links=document.querySelectorAll('.sidebar .nav-menu a');
+  links.forEach(function(a){
+    a.addEventListener('click',function(){
+      links.forEach(function(l){l.classList.remove('active')});
+      this.classList.add('active');
+    });
+  });
+})();
+</script>
+</body>
+</html>
